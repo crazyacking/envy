@@ -1,4 +1,4 @@
-# 0.4.1 (unreleased)
+# 0.4.1
 
 * Add support for unit-variant enums as values, without using the `#[serde(field_identifier)]` attribute [#46](https://github.com/crazyacking/envy/pull/46)
 
