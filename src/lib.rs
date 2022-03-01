@@ -150,7 +150,10 @@ impl<'de> de::Deserializer<'de> for Val {
         if self.1.is_empty() {
             SeqDeserializer::new(empty::<Val>()).deserialize_seq(visitor)
         } else {
-            let values = self.1.split(',').map(|v| Val(self.0.clone(), v.to_owned()));
+            let values = self
+                .1
+                .split(',')
+                .map(|v| Val(self.0.clone(), v.trim().to_owned()));
             SeqDeserializer::new(values).deserialize_seq(visitor)
         }
     }
@@ -303,7 +306,10 @@ where
     T: de::DeserializeOwned,
     Iter: IntoIterator<Item = (String, String)>,
 {
-    T::deserialize(Deserializer::new(iter.into_iter()))
+    T::deserialize(Deserializer::new(iter.into_iter())).map_err(|error| match error {
+        Error::MissingValue(value) => Error::MissingValue(value.to_uppercase()),
+        _ => error,
+    })
 }
 
 /// A type which filters env vars with a prefix for use as serde field inputs
@@ -336,6 +342,12 @@ impl<'a> Prefixed<'a> {
                 None
             }
         }))
+        .map_err(|error| match error {
+            Error::MissingValue(value) => Error::MissingValue(
+                format!("{prefix}{value}", prefix = self.0, value = value).to_uppercase(),
+            ),
+            _ => error,
+        })
     }
 }
 
@@ -417,7 +429,7 @@ mod tests {
         let data = vec![
             (String::from("BAR"), String::from("test")),
             (String::from("BAZ"), String::from("true")),
-            (String::from("DOOM"), String::from("1,2,3")),
+            (String::from("DOOM"), String::from("1, 2, 3 ")),
             // Empty string should result in empty vector.
             (String::from("BOOM"), String::from("")),
             (String::from("SIZE"), String::from("small")),
@@ -452,7 +464,20 @@ mod tests {
         ];
         match from_iter::<_, Foo>(data) {
             Ok(_) => panic!("expected failure"),
-            Err(e) => assert_eq!(e, Error::MissingValue("doom")),
+            Err(e) => assert_eq!(e, Error::MissingValue("DOOM".into())),
+        }
+    }
+
+    #[test]
+    fn prefixed_fails_with_missing_value() {
+        let data = vec![
+            (String::from("PREFIX_BAR"), String::from("test")),
+            (String::from("PREFIX_BAZ"), String::from("true")),
+        ];
+
+        match prefixed("PREFIX_").from_iter::<_, Foo>(data) {
+            Ok(_) => panic!("expected failure"),
+            Err(e) => assert_eq!(e, Error::MissingValue("PREFIX_DOOM".into())),
         }
     }
 

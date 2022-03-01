@@ -6,32 +6,19 @@ use std::{error::Error as StdError, fmt};
 /// to deserialize a type from env vars
 #[derive(Debug, Clone, PartialEq)]
 pub enum Error {
-    MissingValue(&'static str),
+    MissingValue(String),
     Custom(String),
 }
 
-impl StdError for Error {
-    fn description(&self) -> &str {
-        match *self {
-            Error::MissingValue(_) => "missing value",
-            Error::Custom(_) => "custom error",
-        }
-    }
-
-    fn cause(&self) -> Option<&dyn StdError> {
-        match *self {
-            _ => None,
-        }
-    }
-}
+impl StdError for Error {}
 
 impl fmt::Display for Error {
     fn fmt(
         &self,
         fmt: &mut fmt::Formatter,
     ) -> fmt::Result {
-        match *self {
-            Error::MissingValue(field) => write!(fmt, "missing value for field {}", field),
+        match self {
+            Error::MissingValue(field) => write!(fmt, "missing value for {}", &field),
             Error::Custom(ref msg) => write!(fmt, "{}", msg),
         }
     }
@@ -43,7 +30,7 @@ impl SerdeError for Error {
     }
 
     fn missing_field(field: &'static str) -> Error {
-        Error::MissingValue(field)
+        Error::MissingValue(field.into())
     }
 }
 
@@ -55,27 +42,17 @@ mod tests {
 
     #[test]
     fn error_impl_std_error() {
-        impl_std_error(Error::MissingValue("foo_bar"));
+        impl_std_error(Error::MissingValue("FOO_BAR".into()));
         impl_std_error(Error::Custom("whoops".into()))
     }
 
     #[test]
     fn error_display() {
         assert_eq!(
-            format!("{}", Error::MissingValue("foo_bar")),
-            "missing value for field foo_bar"
+            format!("{}", Error::MissingValue("FOO_BAR".into())),
+            "missing value for FOO_BAR"
         );
 
         assert_eq!(format!("{}", Error::Custom("whoops".into())), "whoops")
-    }
-
-    #[test]
-    fn error_description() {
-        assert_eq!(
-            Error::MissingValue("foo_bar").description(),
-            "missing value"
-        );
-
-        assert_eq!(Error::Custom("whoops".into()).description(), "custom error")
     }
 }
