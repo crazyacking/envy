@@ -1,4 +1,4 @@
-# envy [![Github Actions](https://github.com/softprops/envy/workflows/Main/badge.svg)](https://github.com/softprops/envy/actions) [![Coverage Status](https://coveralls.io/repos/github/softprops/envy/badge.svg?branch=master)](https://coveralls.io/github/softprops/envy?branch=master) [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE) [![crates.io](http://meritbadge.herokuapp.com/envy)](https://crates.io/crates/envy) [![Master API docs](https://img.shields.io/badge/docs-master-green.svg)](https://softprops.github.io/envy)
+# envy [![Github Actions](https://github.com/crazyacking/envy/workflows/Main/badge.svg)](https://github.com/crazyacking/envy/actions) [![Coverage Status](https://coveralls.io/repos/github/crazyacking/envy/badge.svg?branch=master)](https://coveralls.io/github/crazyacking/envy?branch=master) [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE) [![crates.io](http://meritbadge.herokuapp.com/envy)](https://crates.io/crates/envy) [![Master API docs](https://img.shields.io/badge/docs-master-green.svg)](https://crazyacking.github.io/envy)
 
 > deserialize environment variables into typesafe structs
 
@@ -112,6 +112,6 @@ the expectation would then be to export the same environment variables prefixed 
 $ APP_FOO=8080 APP_BAR=true APP_BAZ=hello yourapp
 ```
 
-> 👭 Consider this crate a cousin of [envy-store](https://github.com/softprops/envy-store), a crate for deserializing AWS parameter store values into typesafe structs and [recap](https://github.com/softprops/recap), a crate for deserializing named regex capture groups into typesafe structs.
+> 👭 Consider this crate a cousin of [envy-store](https://github.com/crazyacking/envy-store), a crate for deserializing AWS parameter store values into typesafe structs and [recap](https://github.com/crazyacking/recap), a crate for deserializing named regex capture groups into typesafe structs.
 
-Doug Tangren (softprops) 2016-2019
+Doug Tangren (crazyacking) 2016-2019

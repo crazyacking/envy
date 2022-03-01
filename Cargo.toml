@@ -1,11 +1,11 @@
 [package]
 name = "envy"
 version = "0.4.0"
-authors = ["softprops <d.tangren@gmail.com>"]
+authors = ["crazyacking <crazyacking@gmail.com>"]
 description = "deserialize env vars into typesafe structs"
-documentation = "https://softprops.github.io/envy"
-homepage = "https://github.com/softprops/envy"
-repository = "https://github.com/softprops/envy"
+documentation = "https://crazyacking.github.io/envy"
+homepage = "https://github.com/crazyacking/envy"
+repository = "https://github.com/crazyacking/envy"
 keywords = ["serde", "env"]
 license = "MIT"
 readme = "README.md"
@@ -15,8 +15,8 @@ categories = [
 ]
 
 [badges]
-coveralls = { repository = "softprops/envy" }
-travis-ci = { repository = "softprops/envy" }
+coveralls = { repository = "crazyacking/envy" }
+travis-ci = { repository = "crazyacking/envy" }
 
 [dependencies]
 serde = "1.0"
